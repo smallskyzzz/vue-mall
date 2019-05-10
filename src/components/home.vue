@@ -1,17 +1,17 @@
 <template>
   <div>
     <mt-swipe :auto="4000" class="swipe">
-      <mt-swipe-item>1</mt-swipe-item>
-      <mt-swipe-item>2</mt-swipe-item>
-      <mt-swipe-item>3</mt-swipe-item>
+      <mt-swipe-item v-for="(item,index) in banner" :key="index">
+        <img :src='item.src'>
+      </mt-swipe-item>
     </mt-swipe>
     <div class="mui-content">
       <ul class="mui-table-view mui-grid-view mui-grid-9">
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-          <a href="#">
+          <router-link to="/home/newslist">
             <img src="../images/menu1.png" alt="">
             <div class="mui-media-body">新闻资讯</div>
-          </a>
+          </router-link>
         </li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
           <a href="#">
@@ -49,13 +49,28 @@
 </template>
 
 <script>
+import {request} from '../util/util'
 export default {
+  data () {
+    return {
+      banner: []
+    }
+  },
+  created: function () {
+    request('/banner').then((res) => {
+      this.banner = res.data.banner
+    })
+  }
 }
 </script>
 
 <style lang="less" scoped>
   .swipe{
     height: 200px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
   }
   .mui-content{
     border: none;

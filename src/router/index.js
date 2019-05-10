@@ -4,6 +4,8 @@ import Home from '../components/home'
 import Member from '../components/member'
 import Shopcar from '../components/shopcar'
 import Search from '../components/search'
+import newsList from '../components/newsList'
+import newsInfo from '../components/newsInfo'
 
 Vue.use(Router)
 
@@ -28,6 +30,14 @@ export default new Router({
     {
       path: '/search',
       component: Search
+    },
+    {
+      path: '/home/newslist',
+      component: newsList
+    },
+    {
+      path: '/home/newsinfo/:id',
+      component: newsInfo
     }
   ],
   // 覆盖默认的路由高亮类
