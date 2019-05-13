@@ -44,7 +44,7 @@ app.get('/addClickTime/:id', function (req, res) {
     var d = JSON.parse(data)
     for (var i = 0; i < d.newslist.length; i++) {
       if (req.params.id == d.newslist[i].id) {
-        console.log(parseInt(d.newslist[i].clickTime) + 1)
+        // console.log(parseInt(d.newslist[i].clickTime) + 1)
         d.newslist[i].clickTime = parseInt(d.newslist[i].clickTime) + 1
         break
       }
@@ -54,6 +54,33 @@ app.get('/addClickTime/:id', function (req, res) {
       res.send('ok')
     })
   })
+})
+
+// 获取新闻评论（默认一页5条），每次只返回5条数据
+app.get('/newsComment/:id/:pageIndex', function (req, res) {
+  var pageLength = 5
+  fs.readFile(path.join(__dirname, '/mockData/newsComment.json'), 'utf8', (err, data) => {
+    if (err) throw err
+    for (var i = 0; i < JSON.parse(data).newsComment.length; i++) {
+      if (req.params.id == JSON.parse(data).newsComment[i].id) {
+        var ret = []
+        for (var j = 0; j < pageLength; j++) {
+          if (JSON.parse(data).newsComment[i].comment[(req.params.pageIndex - 1) * pageLength + j]) {
+            ret.push(JSON.parse(data).newsComment[i].comment[(req.params.pageIndex - 1) * pageLength + j])
+          }
+        }
+        res.send({id: req.params.id, comment: ret})
+        return
+      }
+    }
+    res.send({data: ''})
+  })
+})
+
+// 增加新闻评论
+app.post('/addNewsComment', function (req, res) {
+  console.log(req.body)
+  res.send(req.body)
 })
 
 app.listen(3000, function () {
