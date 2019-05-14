@@ -12,3 +12,15 @@ export function request (url) {
 
   return promise
 }
+
+export function postRequest (url, data) {
+  var promise = new Promise((resolve, reject) => {
+    axios.post('/api' + url, data).then((res) => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+
+  return promise
+}

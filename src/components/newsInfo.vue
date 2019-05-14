@@ -7,13 +7,14 @@
     </div>
     <p class="content">{{ data.content }}</p>
     <!--评论模块-->
-    <comment :comment="this.comment" @getMoreComment="getMoreComment"></comment>
+    <comment :comment="this.comment" @getMoreComment="getMoreComment" @addComment="addComment" ref="comment"></comment>
   </div>
 </template>
 
 <script>
-import {request} from '../util/util'
+import {request, postRequest} from '../util/util'
 import comment from './comment'
+import {Toast} from 'mint-ui'
 
 export default {
   data () {
@@ -47,6 +48,26 @@ export default {
     getMoreComment: function () {
       this.pageIndex++
       this.getComment()
+    },
+    addComment: function (commentValue) {
+      postRequest('/addNewsComment', {
+        id: this.id,
+        name: this.name || '匿名用户',
+        time: new Date(),
+        data: commentValue
+      }).then((res) => {
+        if (res.data.state) {
+          Toast('评论成功')
+          // 此处当评论成功后有两种方式
+          // 第一种直接回到评论第一页，看最新的5条评论
+          // 第二种保留当前的评论数组，将最新的评论unshift到原来的数组上，模拟请求
+          // 方便起见选择第一种
+          this.$refs.comment.commentValue = ''
+          this.comment = []
+          this.pageIndex = 1
+          this.getComment()
+        }
+      })
     }
   },
   components: {
