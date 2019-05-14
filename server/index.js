@@ -79,10 +79,43 @@ app.get('/newsComment/:id/:pageIndex', function (req, res) {
 
 // 增加新闻评论
 app.post('/addNewsComment', function (req, res) {
-  console.log(req.body)
-  res.send(req.body)
+  fs.readFile(path.join(__dirname, '/mockData/newsComment.json'), 'utf8', (err, comment) => {
+    if (err) throw err
+    var d = JSON.parse(comment)
+    var flag = false
+    for (var i = 0; i < d.newsComment.length; i++) {
+      if (req.body.id == d.newsComment[i].id) {
+        // console.log(parseInt(d.newslist[i].clickTime) + 1)
+        d.newsComment[i].comment.unshift({
+          name: req.body.name,
+          time: req.body.time,
+          data: req.body.data
+        })
+        // 表示json中已经有该条新闻的评论了
+        flag = true
+        break
+      }
+    }
+    // 第一次给该新闻添加评论
+    if (!flag) {
+      d.newsComment.push({
+        id: req.body.id,
+        comment: [
+          {
+            name: req.body.name,
+            time: req.body.time,
+            data: req.body.data
+          }
+        ]
+      })
+    }
+    fs.writeFile(path.join(__dirname, '/mockData/newsComment.json'), JSON.stringify(d), (err) => {
+      if (err) throw err
+      res.send({state: true})
+    })
+  })
 })
 
-app.listen(3000, function () {
+app.listen(8000, function () {
   console.log('server running...')
 })
