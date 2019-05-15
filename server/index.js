@@ -116,6 +116,28 @@ app.post('/addNewsComment', function (req, res) {
   })
 })
 
+// 获取所有的商品列表
+app.get('/goodslist', function (req, res) {
+  fs.readFile(path.join(__dirname, '/mockData/goodslist.json'), (err, data) => {
+    if (err) throw err
+    res.send(JSON.parse(data))
+  })
+})
+
+// 根据id获取商品列表
+app.get('/goodslist/:id', function (req, res) {
+  fs.readFile(path.join(__dirname, '/mockData/goodslist.json'), (err, data) => {
+    if (err) throw err
+    for (var i = 0; i < JSON.parse(data).goods.length; i++) {
+      if (req.params.id == JSON.parse(data).goods[i].id) {
+        res.send(JSON.parse(data).goods[i])
+        return
+      }
+    }
+    res.send({})
+  })
+})
+
 app.listen(8000, function () {
   console.log('server running...')
 })
