@@ -71,7 +71,7 @@ export default {
     }
   },
   components: {
-    'comment': comment
+    comment
   }
 }
 </script>
