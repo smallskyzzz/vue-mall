@@ -22,7 +22,7 @@
           <hr>
           <p>销售价：￥{{ goods.newPrice }}</p>
           <div>购买数量：
-            <number-box></number-box>
+            <number-box ref="numberBox"></number-box>
           </div>
           <div class="shop">
             <mt-button type="primary">立即购买</mt-button>
@@ -66,7 +66,16 @@ export default {
   },
   methods: {
     addToShopCar: function () {
-      this.ballFlag = true
+      // 数量不为0时才提交
+      if (this.$refs.numberBox.getNum() !== 0) {
+        this.ballFlag = true
+        let goodsInfo = {
+          goods: this.goods,
+          count: this.$refs.numberBox.getNum(),
+          selected: true
+        }
+        this.$store.commit('addToShopCar', goodsInfo)
+      }
     },
     beforeEnter (el) {
       el.style.transform = 'translate(0, 0)'
