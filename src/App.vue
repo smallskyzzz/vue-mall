@@ -17,7 +17,7 @@
         <span class="mui-tab-label">会员</span>
       </router-link>
       <router-link to="/shopcar" class="mui-tab-item">
-        <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge">9</span></span>
+        <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="badge">9</span></span>
         <span class="mui-tab-label">购物车</span>
       </router-link>
       <router-link to="search" class="mui-tab-item">

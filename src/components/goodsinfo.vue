@@ -1,5 +1,9 @@
 <template>
   <div class="goods-info">
+    <!--小球-->
+    <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+      <div class="ball" v-show="ballFlag" ref="ball"></div>
+    </transition>
     <div class="mui-card banner">
       <div class="mui-card-content">
         <div class="mui-card-content-inner">
@@ -22,7 +26,7 @@
           </div>
           <div class="shop">
             <mt-button type="primary">立即购买</mt-button>
-            <mt-button type="danger">加入购物车</mt-button>
+            <mt-button type="danger" @click="addToShopCar">加入购物车</mt-button>
           </div>
         </div>
       </div>
@@ -48,7 +52,9 @@ import numberBox from './numberBox'
 export default {
   data () {
     return {
-      goods: {}
+      goods: {},
+      // 小球是否显示
+      ballFlag: false
     }
   },
   created: function () {
@@ -58,6 +64,29 @@ export default {
       this.goods = res.data
     })
   },
+  methods: {
+    addToShopCar: function () {
+      this.ballFlag = true
+    },
+    beforeEnter (el) {
+      el.style.transform = 'translate(0, 0)'
+    },
+    enter (el, done) {
+      el.offsetWidth // eslint-disable-line no-unused-expressions
+      // 得到小球及小标的位置
+      const ballPosition = this.$refs.ball.getBoundingClientRect()
+      const badgePosition = document.getElementById('badge').getBoundingClientRect()
+      // 计算差值
+      const xDist = badgePosition.left - ballPosition.left
+      const yDist = badgePosition.top - ballPosition.top
+      el.style.transform = `translate(${xDist}px, ${yDist}px)`
+      el.style.transition = 'all 1s cubic-bezier(.4, -0.3, 1, .68)'
+      done()
+    },
+    afterEnter () {
+      this.ballFlag = false
+    }
+  },
   components: {
     numberBox
   }
@@ -66,6 +95,16 @@ export default {
 
 <style lang="less" scoped>
 .goods-info{
+  .ball{
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 494px;
+    left: 146px;
+    z-index: 99;
+    border-radius: 50%;
+    background-color: red;
+  }
   .banner{
     .swipe{
       height: 300px;
