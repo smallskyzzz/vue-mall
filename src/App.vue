@@ -35,6 +35,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  *{
+    touch-action: pan-y;
+  }
   #app{
     padding-top: 40px;
     padding-bottom: 50px;
