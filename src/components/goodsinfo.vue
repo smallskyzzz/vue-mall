@@ -22,7 +22,7 @@
           <hr>
           <p>销售价：￥{{ goods.newPrice }}</p>
           <div>购买数量：
-            <number-box ref="numberBox"></number-box>
+            <number-box ref="numberBox" @minus="minus" @plus="plus" :num="num"></number-box>
           </div>
           <div class="shop">
             <mt-button type="primary">立即购买</mt-button>
@@ -54,7 +54,9 @@ export default {
     return {
       goods: {},
       // 小球是否显示
-      ballFlag: false
+      ballFlag: false,
+      // 购物车数量
+      num: 1
     }
   },
   created: function () {
@@ -94,6 +96,15 @@ export default {
     },
     afterEnter () {
       this.ballFlag = false
+    },
+    minus: function () {
+      if (this.num === 0) {
+        return
+      }
+      this.num--
+    },
+    plus: function () {
+      this.num++
     }
   },
   components: {

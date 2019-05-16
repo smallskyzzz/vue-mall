@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <!--顶部header-->
-    <mt-header fixed="" title="vue-mall"></mt-header>
+    <mt-header fixed="" title="vue-mall">
+      <span slot="left" @click="goBack" v-show="flag">
+        <mt-button icon="back">返回</mt-button>
+      </span>
+    </mt-header>
     <!--router-view-->
     <transition>
       <router-view></router-view>
@@ -30,7 +34,34 @@
 
 <script>
 export default {
-  name: 'App'
+  data () {
+    return {
+      // 是否显示返回按钮
+      flag: true
+    }
+  },
+  created: function () {
+    this.flag = this.$route.path !== '/home'
+    // if (this.$route.path === '/home') {
+    //   this.flag = false
+    // } else {
+    //   this.flag = true
+    // }
+  },
+  methods: {
+    goBack: function () {
+      this.$router.go(-1)
+    }
+  },
+  watch: {
+    '$route.path': function (newVal) {
+      if (newVal === '/home') {
+        this.flag = false
+      } else {
+        this.flag = true
+      }
+    }
+  }
 }
 </script>
 

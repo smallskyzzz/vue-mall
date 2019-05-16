@@ -8,13 +8,12 @@
 
 <script>
 export default {
-  props: [
-    // min可通过父组件传入
-    'min'
-  ],
-  data () {
-    return {
-      num: 0
+  props: {
+    min: {
+      default: 0
+    },
+    num: {
+      default: 0
     }
   },
   mounted: function () {
@@ -24,13 +23,15 @@ export default {
   },
   methods: {
     minus: function () {
-      if (this.num === (this.min || 0)) {
-        return
-      }
-      this.num--
+      // if (this.num === (this.min)) {
+      //   return
+      // }
+      // 子组件不能改变props的值，派发给父组件处理
+      // this.num--
+      this.$emit('minus')
     },
     plus: function () {
-      this.num++
+      this.$emit('plus')
     },
     setMinusDisabled: function () {
       // 增加一个类名

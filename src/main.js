@@ -21,7 +21,8 @@ const debug = process.env.NODE_ENV !== 'production'
 let store = new Vuex.Store({
   state: {
     // 购物车中的商品数据
-    car: []
+    // 这样写就不会出现observer对象
+    car: JSON.parse(JSON.stringify(JSON.parse(localStorage.getItem('car')))) || []
   },
   mutations: {
     // 需要直接将state当做一个参数传进来
@@ -29,7 +30,7 @@ let store = new Vuex.Store({
       // 是否已经存在该商品
       let flag = false
       state.car.forEach((item) => {
-        if (item.goods === goodsInfo.goods) {
+        if (item.goods.id === goodsInfo.goods.id) {
           item.count += goodsInfo.count
           flag = true
         }
@@ -37,6 +38,36 @@ let store = new Vuex.Store({
       if (!flag) {
         state.car.push(goodsInfo)
       }
+      // 更新car之后将其存入本地localstorage中
+      localStorage.setItem('car', JSON.stringify(state.car))
+    },
+    // 增加减少购物车数量
+    changeCount: function (state, data) {
+      state.car.forEach((item) => {
+        if (item.goods.id === data.id) {
+          data.type === 'plus' ? item.count++ : item.count--
+        }
+      })
+      // 更新car之后将其存入本地localstorage中
+      localStorage.setItem('car', JSON.stringify(state.car))
+    },
+    // 删除某一项
+    deleteCount: function (state, id) {
+      state.car.forEach((item, index) => {
+        if (item.goods.id === id) {
+          state.car.splice(index, 1)
+        }
+      })
+      // 更新car之后将其存入本地localstorage中
+      localStorage.setItem('car', JSON.stringify(state.car))
+    },
+    // 改变是否选中状态
+    changeSelected: function (state, id) {
+      state.car.forEach((item) => {
+        if (item.goods.id === id) {
+          item.selected = !item.selected
+        }
+      })
     }
   },
   // 相当于计算属性，或者说filters
@@ -47,6 +78,9 @@ let store = new Vuex.Store({
         count += item.count
       })
       return count
+    },
+    getCar: function (state) {
+      return state.car
     }
   },
   plugins: debug ? [createLogger()] : []
