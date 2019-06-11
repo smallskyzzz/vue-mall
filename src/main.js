@@ -22,7 +22,9 @@ let store = new Vuex.Store({
   state: {
     // 购物车中的商品数据
     // 这样写就不会出现observer对象
-    car: JSON.parse(JSON.stringify(JSON.parse(localStorage.getItem('car')))) || []
+    car: JSON.parse(JSON.stringify(JSON.parse(localStorage.getItem('car')))) || [],
+    // 是否登陆
+    checked: false
   },
   mutations: {
     // 需要直接将state当做一个参数传进来
@@ -68,6 +70,10 @@ let store = new Vuex.Store({
           item.selected = !item.selected
         }
       })
+    },
+    // 登陆后
+    check: function (state, flag) {
+      state.checked = flag
     }
   },
   // 相当于计算属性，或者说filters
@@ -81,9 +87,29 @@ let store = new Vuex.Store({
     },
     getCar: function (state) {
       return state.car
+    },
+    getChecked: function (state) {
+      return state.checked
     }
   },
   plugins: debug ? [createLogger()] : []
+})
+
+router.beforeEach((to, from, next) => {
+  console.log(to.path, JSON.parse(JSON.stringify(store.state)).checked)
+  if (to.path !== '/') {
+    // alert(vm)
+    if (!JSON.parse(JSON.stringify(store.state)).checked) {
+      // alert('请登录')
+      next({
+        path: '/'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 /* eslint-disable no-new */

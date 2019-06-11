@@ -2,8 +2,11 @@
   <div id="app">
     <!--顶部header-->
     <mt-header fixed="" title="vue-mall">
-      <span slot="left" @click="goBack" v-show="flag">
+      <span slot="left" @click="goBack" v-show="flag && login">
         <mt-button icon="back">返回</mt-button>
+      </span>
+      <span slot="right" @click="out">
+        <mt-button>退出</mt-button>
       </span>
     </mt-header>
     <!--router-view-->
@@ -11,7 +14,7 @@
       <router-view></router-view>
     </transition>
     <!--tab-->
-    <nav class="mui-bar mui-bar-tab">
+    <nav class="mui-bar mui-bar-tab" v-show="login">
       <router-link to="/home" class="mui-tab-item">
         <span class="mui-icon mui-icon-home"></span>
         <span class="mui-tab-label">首页</span>
@@ -37,7 +40,9 @@ export default {
   data () {
     return {
       // 是否显示返回按钮
-      flag: true
+      flag: true,
+      // 是否登陆
+      login: false
     }
   },
   created: function () {
@@ -51,6 +56,11 @@ export default {
   methods: {
     goBack: function () {
       this.$router.go(-1)
+    },
+    out: function () {
+      window.document.cookie = 'name' + '='
+      this.$store.commit('check', false)
+      this.$router.push('/')
     }
   },
   watch: {
@@ -60,6 +70,9 @@ export default {
       } else {
         this.flag = true
       }
+    },
+    '$store.getters.getChecked': function (newVal) {
+      this.login = newVal
     }
   }
 }
