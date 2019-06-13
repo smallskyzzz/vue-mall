@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../components/login'
+import Register from '../components/register'
 import Home from '../components/home'
 import Member from '../components/member'
 import Shopcar from '../components/shopcar'
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/',
       component: Login
+    },
+    {
+      path: '/register',
+      component: Register
     },
     {
       path: '/home',

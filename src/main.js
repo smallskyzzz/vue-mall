@@ -97,7 +97,7 @@ let store = new Vuex.Store({
 
 router.beforeEach((to, from, next) => {
   console.log(to.path, JSON.parse(JSON.stringify(store.state)).checked)
-  if (to.path !== '/') {
+  if (to.path !== '/' && to.path !== '/register') {
     // alert(vm)
     if (!JSON.parse(JSON.stringify(store.state)).checked) {
       // alert('请登录')

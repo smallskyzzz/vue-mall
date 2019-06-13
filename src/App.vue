@@ -5,7 +5,7 @@
       <span slot="left" @click="goBack" v-show="flag && login">
         <mt-button icon="back">返回</mt-button>
       </span>
-      <span slot="right" @click="out">
+      <span slot="right" @click="out" v-show="flag && login">
         <mt-button>退出</mt-button>
       </span>
     </mt-header>

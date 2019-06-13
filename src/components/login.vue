@@ -8,8 +8,13 @@
       <label>密码：</label>
       <input v-model="password" type="password" class="mui-input-clear mui-input-password" placeholder="请输入密码">
     </div>
-    <div class="mui-input-row">
+    <div class="mui-input-row btn-row">
       <mt-button type="danger" class="login-bt" @click="login">登陆</mt-button>
+    </div>
+    <div class="mui-input-row about">
+      <input type="checkbox" v-model="ifRemember">
+      <span>记住密码</span>
+      <span class="register" @click="register">立即注册>></span>
     </div>
   </div>
 </template>
@@ -19,7 +24,9 @@ export default {
   data () {
     return {
       name: '',
-      password: ''
+      password: '',
+      // 是否记住密码
+      ifRemember: false
       // 是否登陆
       // checked: false
     }
@@ -29,12 +36,20 @@ export default {
   },
   methods: {
     login: function () {
-      this.clearCookie()
-      if (this.name === '1' && this.password === '1') {
+      if (this.ifRemember) {
+        this.clearCookie()
+        // if (this.name === '1' && this.password === '1') {
         this.$store.commit('check', true)
         this.$router.push('/home')
         this.setCookie(this.name, 0.1)
+        // }
+      } else {
+        this.$store.commit('check', true)
+        this.$router.push('/home')
       }
+    },
+    register: function () {
+      this.$router.push('/register')
     },
     setCookie: function (name, day) {
       var date = new Date()
@@ -58,14 +73,30 @@ export default {
 
 <style lang="less" scoped>
   .login{
-    .login-bt{
-      display: block;
-      margin: 0 auto;
-      width: 100%;
-      text-align: center;
+    margin: 10px;
+    .mui-input-row{
+      margin-top: 5px;
+    }
+    .btn-row{
+      .login-bt{
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+      }
+    }
+    .about{
+      line-height: 40px;
+      span{
+        font-size: 12px;
+        color: #ccc;
+      }
+      .register{
+        float: right;
+      }
     }
   }
   .mint-button-text{
-      width: 100% !important;
-    }
+    width: 100% !important;
+  }
 </style>
