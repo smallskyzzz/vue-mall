@@ -24,3 +24,16 @@ export function postRequest (url, data) {
 
   return promise
 }
+
+// 获取cookie某个key的value
+export function getValueByKey (str) {
+  let strArr = str.split(';')
+  let nameInfo = ''
+  strArr.forEach((item) => {
+    if (item.indexOf(' name=') === 0) {
+      nameInfo = item
+    }
+  })
+  // console.log(nameInfo.split('='))
+  return nameInfo.split('=')[1]
+}

@@ -138,6 +138,49 @@ app.get('/goodslist/:id', function (req, res) {
   })
 })
 
+// 登陆
+app.post('/login', function (req, res) {
+  fs.readFile(path.join(__dirname, '/mockData/user.json'), 'utf-8', (err, user) => {
+    if (err) throw err
+    var users = JSON.parse(user)
+    console.log(req.body, users.user)
+    // 用户名密码是否正确
+    let flag = false
+    users.user.forEach((item) => {
+      if (item.name === req.body.name && item.password === req.body.password) {
+        flag = true
+        res.send({state: true})
+      }
+    })
+    if (!flag) {
+      res.send({state: false})
+    }
+  })
+})
+
+// 注册
+app.post('/register', function (req, res) {
+  fs.readFile(path.join(__dirname, '/mockData/user.json'), 'utf-8', (err, user) => {
+    if (err) throw err
+    var users = JSON.parse(user)
+    // 用户是否存在
+    var flag = false
+    users.user.forEach((item) => {
+      if (item.name === req.body.name) {
+        flag = true
+        res.send({state: false, str: '用户已存在'})
+      }
+    })
+    if (!flag) {
+      users.user.push(req.body)
+      fs.writeFile(path.join(__dirname, '/mockData/user.json'), JSON.stringify(users), (err) => {
+        if (err) throw err
+        res.send({state: true})
+      })
+    }
+  })
+})
+
 app.listen(8000, function () {
   console.log('server running...')
 })

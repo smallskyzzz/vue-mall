@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import {postRequest, getValueByKey} from '../util/util'
+
 export default {
   data () {
     return {
@@ -36,17 +38,28 @@ export default {
   },
   methods: {
     login: function () {
-      if (this.ifRemember) {
-        this.clearCookie()
-        // if (this.name === '1' && this.password === '1') {
-        this.$store.commit('check', true)
-        this.$router.push('/home')
-        this.setCookie(this.name, 0.1)
-        // }
-      } else {
-        this.$store.commit('check', true)
-        this.$router.push('/home')
-      }
+      let _this = this
+      postRequest('/login', {
+        name: _this.name,
+        password: _this.password
+      }).then((res) => {
+        // 成功登陆
+        if (res.data.state) {
+          if (this.ifRemember) {
+            this.clearCookie()
+            // if (this.name === '1' && this.password === '1') {
+            this.$store.commit('check', true)
+            this.$router.push('/home')
+            this.setCookie(this.name, 0.1)
+            // }
+          } else {
+            this.$store.commit('check', true)
+            this.$router.push('/home')
+          }
+        } else {
+          alert('用户名或密码错误')
+        }
+      })
     },
     register: function () {
       this.$router.push('/register')
@@ -59,7 +72,8 @@ export default {
     },
     getCookie: function () {
       var cookie = window.document.cookie
-      if (cookie.split('=')[1]) {
+      var name = getValueByKey(cookie)
+      if (name) {
         this.$store.commit('check', true)
         this.$router.push('/home')
       }

@@ -5,7 +5,7 @@
       <span slot="left" @click="goBack" v-show="flag && login">
         <mt-button icon="back">返回</mt-button>
       </span>
-      <span slot="right" @click="out" v-show="flag && login">
+      <span slot="right" @click="out" v-show="login">
         <mt-button>退出</mt-button>
       </span>
     </mt-header>
@@ -58,7 +58,7 @@ export default {
       this.$router.go(-1)
     },
     out: function () {
-      window.document.cookie = 'name' + '='
+      window.document.cookie = 'name='
       this.$store.commit('check', false)
       this.$router.push('/')
     }
