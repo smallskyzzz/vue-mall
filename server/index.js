@@ -181,6 +181,47 @@ app.post('/register', function (req, res) {
   })
 })
 
+// 获取图片分享组件中对应的图片(也可传入id)
+app.get('/imagelist/:name', function (req, res) {
+  fs.readFile(path.join(__dirname, '/mockData/imagelist.json'), (err, data) => {
+    if (err) throw err
+    if (req.params.name === '全部') {
+      res.send(JSON.parse(data))
+    } else {
+      let arr = []
+      // 是否传入的是分类
+      let flag = false
+      JSON.parse(data).images.forEach((item) => {
+        if (item.item === req.params.name) {
+          arr.push(item)
+          flag = true
+        }
+      })
+      if (flag) {
+        res.send({images: arr})
+      } else {
+        JSON.parse(data).images.forEach((item) => {
+          if (item.id == req.params.name) {
+            res.send({images: item})
+          }
+        })
+      }
+    }
+  })
+})
+
+// 根据id获取对应的图片
+// app.get('/imagelist/:name/:id', function (req, res) {
+//   fs.readFile(path.join(__dirname, '/mockData/imagelist.json'), (err, data) => {
+//     if (err) throw err
+//     JSON.parse(data).images.forEach((item) => {
+//       if (item.id === req.params.id) {
+//         res.send(item)
+//       }
+//     })
+//   })
+// })
+
 app.listen(8000, function () {
   console.log('server running...')
 })

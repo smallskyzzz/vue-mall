@@ -10,6 +10,8 @@ import newsList from '../components/newsList'
 import newsInfo from '../components/newsInfo'
 import goodsList from '../components/goodslist'
 import goodsInfo from '../components/goodsinfo'
+import imageShare from '../components/imageShare'
+import imageShareItem from '../components/imageShareItem'
 
 Vue.use(Router)
 
@@ -54,6 +56,14 @@ export default new Router({
     {
       path: '/home/goodsInfo/:id',
       component: goodsInfo
+    },
+    {
+      path: '/home/imageShare',
+      component: imageShare
+    },
+    {
+      path: '/home/imageShare/:name/:id',
+      component: imageShareItem
     }
   ],
   // 覆盖默认的路由高亮类

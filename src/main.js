@@ -12,11 +12,15 @@ import 'mint-ui/lib/style.css'
 import './lib/mui/css/mui.min.css'
 // 导入扩展图标样式
 import './lib/mui/css/icons-extra.css'
+// 图片预览插件
+import VuePreview from 'vue-preview'
 
 Vue.config.productionTip = false
 Vue.use(MintUi)
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
+
+Vue.use(VuePreview)
 
 let store = new Vuex.Store({
   state: {
@@ -96,7 +100,11 @@ let store = new Vuex.Store({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to.path, JSON.parse(JSON.stringify(store.state)).checked)
+  // 当在每个页面刷新时都会进入/home页面（因为刷新后会将vuex清空，进入login，然后判断并进入/home）
+  // 可以在每次刷新时将该次页面存入cookie，下次直接读取
+  // console.log(store.getters.getChecked)
+  // console.log(to.path, JSON.parse(JSON.stringify(store.state)).checked)
+  // console.log(to.path)
   if (to.path !== '/' && to.path !== '/register') {
     // alert(vm)
     if (!JSON.parse(JSON.stringify(store.state)).checked) {
@@ -113,7 +121,7 @@ router.beforeEach((to, from, next) => {
 })
 
 /* eslint-disable no-new */
-new Vue({
+window.vm = new Vue({
   el: '#app',
   router,
   components: { App },
